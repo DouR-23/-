@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f6bff">
+<title>益口云 · 口腔健康管理</title>
+<style>
+/* ===== 全局变量与 15 套主题 ===== */
+:root{--blue:#2f6bff;--blue2:#5b8cff;--blue-soft:#eaf1ff;--bg:#f3f6ff;--card:#ffffff;--star:#ffc53d;--star-dim:#e4e8f2;--text:#1f2d3d;--muted:#7a8aa5;--line:#e6ebf5;--danger:#e5484d;--ok:#2bb673;--radius:16px}
+body.theme-1 { --blue:#2f6bff;--blue2:#5b8cff;--blue-soft:#eaf1ff;--bg:#f3f6ff; }
+body.theme-2 { --blue:#0077b6;--blue2:#00b4d8;--blue-soft:#e0f7fa;--bg:#f0f9ff; }
+body.theme-3 { --blue:#f97316;--blue2:#fb923c;--blue-soft:#fff7ed;--bg:#fffaf5; }
+body.theme-4 { --blue:#16a34a;--blue2:#22c55e;--blue-soft:#f0fdf4;--bg:#f7fef9; }
+body.theme-5 { --blue:#9333ea;--blue2:#a855f7;--blue-soft:#f3e8ff;--bg:#faf5ff; }
+body.theme-6 { --blue:#db2777;--blue2:#f472b6;--blue-soft:#fdf2f8;--bg:#fff5f9; }
+body.theme-7 { --blue:#dc2626;--blue2:#ef4444;--blue-soft:#fef2f2;--bg:#fff5f5; }
+body.theme-8 { --blue:#ca8a04;--blue2:#eab308;--blue-soft:#fefce8;--bg:#fffdf0; }
+body.theme-9 { --blue:#0f766e;--blue2:#14b8a6;--blue-soft:#f0fdfa;--bg:#f0fdfa; }
+body.theme-10 { --blue:#475569;--blue2:#64748b;--blue-soft:#f1f5f9;--bg:#f8fafc; }
+body.theme-11 { --blue:#ea580c;--blue2:#f97316;--blue-soft:#fff7ed;--bg:#fff7ed; }
+body.theme-12 { --blue:#0891b2;--blue2:#06b6d4;--blue-soft:#ecfeff;--bg:#ecfeff; }
+body.theme-13 { --blue:#4f46e5;--blue2:#6366f1;--blue-soft:#e0e7ff;--bg:#f5f7ff; }
+body.theme-14 { --blue:#059669;--blue2:#10b981;--blue-soft:#d1fae5;--bg:#ecfdf5; }
+body.theme-15 { --blue:#e11d48;--blue2:#f43f5e;--blue-soft:#ffe4e6;--bg:#fff1f2; }
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{max-width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#dde5f3;color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;font-size:15px}
+#app{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;transition:background 0.3s}
+.page{display:none;padding:16px 16px 96px}
+.page.active{display:block}
+
+/* ===== 主页 Logo 区 ===== */
+.brand-header { background: #ffffff; padding: 30px 20px 24px; text-align: center; border-radius: 0 0 32px 32px; box-shadow: 0 8px 24px rgba(47,107,255,.06); margin-bottom: 20px; position: relative; overflow: hidden; }
+.brand-header::before { content: ''; position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(47,107,255,0.08) 0%, transparent 70%); border-radius: 50%; }
+.css-logo-wrap { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+.css-tooth-box { width: 90px; height: 90px; background: linear-gradient(135deg, var(--blue), var(--blue2)); border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(47,107,255,.35); margin-bottom: 16px; position: relative; }
+.css-tooth-box svg { width: 56px; height: 56px; fill: #ffffff; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+.css-title { font-size: 32px; font-weight: 800; color: #1f2d3d; letter-spacing: 4px; line-height: 1.2; margin-bottom: 8px; background: linear-gradient(135deg, #1f2d3d, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.css-subtitle { font-size: 14px; color: var(--muted); letter-spacing: 2px; font-weight: 500; }
+
+/* ===== 通用组件 ===== */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 4px 16px rgba(47,107,255,.07);padding:16px;margin-bottom:14px; border: 1px solid transparent; transition: all 0.3s}
+.card h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);display:inline-block}
+.muted{color:var(--muted);font-size:13px}
+.btn{display:block;width:100%;min-height:44px;border:none;border-radius:12px;font-size:15px;cursor:pointer;background:#fff;color:var(--blue);border:1px solid var(--line);transition:opacity .15s, background 0.3s}
+.btn:active{opacity:.75}
+.btn.primary{background:var(--blue);color:#fff;border:none}
+.btn.star{background:linear-gradient(135deg,#ffd66b,#ffb52e);color:#5a3b00;border:none;font-weight:600}
+.btn.danger{background:#ffecec;color:var(--danger);border:none}
+.btn.ghost{background:#f5f7fc;color:var(--muted);border:none}
+.btn:disabled{opacity:0.5;cursor:not-allowed;filter:grayscale(1)}
+.btn.sm{width:auto;min-height:36px;padding:0 14px;font-size:13px;display:inline-block}
+.back-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back-bar button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--text);font-size:18px;cursor:pointer;flex:none}
+.back-bar .t{font-size:17px;font-weight:600}
+input[type=time],select,input[type=text]{min-height:44px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:16px;background:#fff;color:var(--text);width:100%;outline:none}
+.form-row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.form-row label{font-size:14px;flex:none;min-width:72px}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+.disclaimer{font-size:12px;color:var(--muted);background:var(--blue-soft);border-radius:10px;padding:8px 12px;margin-top:12px}
+
+/* ===== 首页 ===== */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.stat{background:var(--card);border-radius:14px;padding:10px 6px;text-align:center;box-shadow:0 4px 14px rgba(47,107,255,.06)}
+.stat .v{font-size:15px;font-weight:700;color:var(--blue);white-space:nowrap}
+.stat .v.star-c{color:#c77700}
+.stat .l{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap}
+.big-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 6px 18px rgba(47,107,255,.09);cursor:pointer;border:none;width:100%;text-align:left}
+.big-card:active{transform:scale(.98)}
+.big-card .ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none}
+.big-card .ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.big-card.blue .ic{background:var(--blue-soft);color:var(--blue)}
+.big-card.green .ic{background:#e8f7f0;color:var(--ok)}
+.big-card.gold .ic{background:#fff6e0;color:#c77700}
+.big-card.purple .ic{background:#f3e8ff;color:#9333ea}
+.big-card .b-t{font-size:17px;font-weight:700}
+.big-card .b-d{font-size:12px;color:var(--muted);margin-top:2px}
+.big-card .arrow{margin-left:auto;color:var(--muted);font-size:18px;flex:none}
+.record-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.record-row:last-child{border-bottom:none}
+.record-row .slot{font-size:14px;font-weight:600;width:52px;flex:none}
+.record-row .val{font-size:13px;color:var(--muted);flex:1;text-align:right}
+.record-row .stars{color:#c77700;font-weight:700;font-size:14px;width:64px;text-align:right;flex:none}
+
+/* ===== 底部导航 ===== */
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:#fff;border-top:1px solid var(--line);display:flex;z-index:40;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{flex:1;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);font-size:11px;cursor:pointer;border:none;background:none}
+.nav-item svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-item.active{color:var(--blue);font-weight:600}
+
+/* ===== 计时页 ===== */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:60;background:linear-gradient(180deg,var(--blue-soft) 0%,#ffffff 55%,var(--bg) 100%);max-width:480px;margin:0 auto;overflow-y:auto;overflow-x:hidden;display:none}
+.overlay.active{display:block}
+.timer-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
+.timer-head .side{display:flex;gap:8px}
+.tbtn{min-width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--blue);font-size:15px;cursor:pointer;padding:0 12px}
+.tbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ring-wrap{position:relative;width:250px;height:250px;margin:6px auto 0}
+.ring-wrap svg.ring{position:absolute;left:10px;top:10px}
+.ring-track{stroke:var(--star-dim);stroke-width:12;fill:none}
+.ring-prog{stroke:var(--blue2);stroke-width:12;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .1s linear;fill:none}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.time-big{font-size:38px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:1px}
+.time-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.star-node{position:absolute;width:30px;height:30px;line-height:30px;text-align:center;font-size:18px;color:#cfd6e6;transform:translate(-50%,-50%);transition:color .2s;z-index:2}
+.star-node.lit{color:var(--star);text-shadow:0 0 10px rgba(255,197,61,.8)}
+.zone-text{text-align:center;font-size:15px;font-weight:600;color:var(--text);margin:10px 0 4px}
+.zone-text b{color:var(--blue)}
+.zones{display:flex;justify-content:center;gap:6px;padding:0 14px}
+.zone{flex:1;min-width:0;height:52px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.zone.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.zone.done{background:var(--blue-soft);border-color:var(--blue-soft);color:var(--blue)}
+.timer-actions{display:flex;gap:10px;padding:14px 16px 20px}
+.timer-actions .btn{flex:1}
+
+/* ===== 完成页 ===== */
+.done-card{text-align:center;padding:34px 20px}
+.done-stars{font-size:44px;color:var(--star);margin-bottom:6px;letter-spacing:4px}
+.done-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.done-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.done-stats{display:flex;gap:8px;margin-bottom:18px}
+.done-stats .ds{flex:1;background:var(--blue-soft);border-radius:12px;padding:12px 4px;text-align:center}
+.done-stats .ds .d1{font-size:17px;font-weight:700;color:var(--blue)}
+.done-stats .ds .d2{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ===== 习惯统计（图表） ===== */
+.tab-switch { display: flex; background: var(--blue-soft); border-radius: 10px; padding: 4px; margin-bottom: 16px; }
+.tab-switch button { flex: 1; border: none; background: transparent; padding: 8px; border-radius: 8px; font-size: 14px; cursor: pointer; color: var(--muted); font-weight: 600; transition: all 0.2s; }
+.tab-switch button.active { background: #fff; color: var(--blue); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.chart-container { position: relative; margin-top: 10px; }
+.chart-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+.chart-bar-row .lbl { width: 40px; color: var(--muted); }
+.chart-bar-row .bar-bg { flex: 1; height: 10px; background: var(--star-dim); border-radius: 6px; overflow: hidden; }
+.chart-bar-row .bar-fill { height: 100%; background: var(--blue); border-radius: 6px; }
+.pie-chart-wrap { display: flex; align-items: center; justify-content: space-around; margin: 20px 0; }
+.pie-chart { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(var(--blue) 0% var(--p1), var(--blue2) var(--p1) var(--p2), var(--star) var(--p2) 100%); position: relative; }
+.pie-legend { font-size: 12px; display: flex; flex-direction: column; gap: 6px; }
+.pie-legend span { display: flex; align-items: center; gap: 6px; }
+.pie-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+.line-chart-box { position: relative; width: 100%; height: 160px; margin-top: 10px; }
+.line-chart-box svg { width: 100%; height: 100%; overflow: visible; }
+
+/* ===== 兑换页 ===== */
+.exchange-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+.exchange-item { background: var(--card); border-radius: var(--radius); padding: 16px; text-align: center; box-shadow: 0 4px 14px rgba(47,107,255,.06); border: 2px solid transparent; position: relative; transition: all 0.2s; }
+.exchange-item.owned { border-color: var(--ok); background: #f0fdf4; }
+.exchange-item.equipped { border-color: var(--star); background: #fffdf5; box-shadow: 0 4px 14px rgba(255,197,61,.2); }
+.exchange-item .ex-icon { font-size: 36px; margin-bottom: 8px; }
+.exchange-item .ex-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.exchange-item .ex-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; min-height: 34px; }
+.exchange-item .ex-cost { font-size: 14px; font-weight: 700; color: #c77700; margin-bottom: 12px; }
+.exchange-item .btn { min-height: 36px; font-size: 13px; padding: 0 10px; }
+.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.badge{background:var(--card);border-radius:12px;padding:10px 6px;text-align:center;border:1px solid var(--line)}
+.badge .bi{font-size:22px;color:var(--star);margin-bottom:4px}
+.badge .bn{font-size:12px;font-weight:600}
+.badge .bd{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+/* ===== 小游戏界面 ===== */
+#gameOverlay { position: fixed; inset: 0; z-index: 100; background: #111; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; overflow: hidden; }
+#gameOverlay.active { display: flex; }
+.game-header { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+.game-score { font-size: 24px; font-weight: bold; color: #ffc53d; }
+.game-area { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.game-item { position: absolute; font-size: 40px; cursor: pointer; user-select: none; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; }
+.game-item:active { transform: scale(0.8); }
+.game-item.bad { filter: drop-shadow(0 0 10px red); }
+.game-item.good { filter: drop-shadow(0 0 10px green); }
+
+/* ===== 科普/商城等 ===== */
+.sci-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sci-card{background:var(--card);border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 4px 12px rgba(47,107,255,.06);border:none;text-align:left}
+.sci-card:active{transform:scale(.97)}
+.sci-card .ic{width:38px;height:38px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;margin-bottom:8px}
+.sci-card .st{font-size:15px;font-weight:700;margin-bottom:4px}
+.sci-card .sd{font-size:12px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sci-detail p{margin-bottom:10px;font-size:14px}
+.sci-detail .meta{font-size:12px;color:var(--muted);background:#f5f7fc;border-radius:10px;padding:10px 12px;margin-top:6px}
+.shop-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:0 4px 14px rgba(47,107,255,.07)}
+.shop-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.shop-head .sname{font-size:16px;font-weight:700}
+.shop-item{margin-top:10px;font-size:13px;color:var(--text)}
+.shop-item .k{color:var(--muted);font-size:12px;font-weight:600}
+.shop-item p{margin-top:2px}
+details.note{background:var(--card);border-radius:12px;padding:0;margin-bottom:10px;border:1px solid var(--line);overflow:hidden}
+details.note summary{padding:12px 14px;font-size:14px;font-weight:600;cursor:pointer;list-style:none}
+details.note summary::after{content:"+";float:right;color:var(--muted)}
+details.note[open] summary::after{content:"-"}
+details.note .nb{padding:0 14px 12px;font-size:13px;color:var(--muted)}
+.modal-mask{position:fixed;inset:0;background:rgba(20,30,50,.45);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-mask.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:320px;padding:20px;text-align:center}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:8px}
+.modal-msg{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.modal-actions{display:flex;gap:10px}
+.modal-actions .btn{flex:1}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;max-width:min(440px,90vw);background:rgba(31,45,61,.92);color:#fff;font-size:14px;padding:10px 18px;border-radius:22px;z-index:999;opacity:0;pointer-events:none;transition:opacity .25s;text-align:center}
+#toast.show{opacity:1}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:18px 0}
+</style>
+</head>
+<body>
+<div id="app">
+  
+  <!-- 小游戏层 -->
+  <div id="gameOverlay">
+    <div class="game-header">
+      <button class="btn ghost" style="width:auto;padding:0 15px;background:rgba(255,255,255,0.2);color:#fff;border:none;" onclick="closeGame()">退出</button>
+      <div class="game-score">得分: <span id="gameScore">0</span></div>
+      <div class="game-score" style="color:#fff;font-size:16px;">时间: <span id="gameTime">30</span>s</div>
+    </div>
+    <div class="game-area" id="gameArea"></div>
+  </div>
+
+  <!-- ===== 首页 ===== -->
+  <section class="page active" id="page-home">
+    <div class="brand-header">
+      <div class="css-logo-wrap">
+        <div class="css-tooth-box">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12,1.5 C7.5,1.5 4.5,4.5 4.5,9 C4.5,13 6,15.5 7,18.5 C7.8,20.8 8.2,22.5 9.5,22.5 C10.8,22.5 11,18.5 12,18.5 C13,18.5 13.2,22.5 14.5,22.5 C15.8,22.5 16.2,20.8 17,18.5 C18,15.5 19.5,13 19.5,9 C19.5,4.5 16.5,1.5 12,1.5 Z"/>
+            <circle cx="9" cy="9" r="1.3" fill="var(--blue)" />
+            <circle cx="15" cy="9" r="1.3" fill="var(--blue)" />
+            <path d="M18,4 L19,6 L21,6.5 L19,7 L18,9 L17,7 L15,6.5 L17,6 Z" fill="#ffc53d" opacity="0.9"/>
+            <path d="M5,15 L5.8,16.5 L7.5,16.8 L5.8,17.1 L5,18.5 L4.2,17.1 L2.5,16.8 L4.2,16.5 Z" fill="#ffc53d" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="css-title">益口云</div>
+        <div class="css-subtitle">智能口腔健康管理平台</div>
+      </div>
+    </div>
+
+    <div class="stats-bar" id="homeStats"></div>
+    
+    <button class="big-card blue" onclick="openTimer()">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="8"/></svg></span>
+      <span><span class="b-t">刷牙计时</span><br><span class="b-d">3 分钟正向计时 · 每满 1 分钟得 1 颗星</span></span>
+      <span class="arrow">›</span>
+    </button>
+    <button class="big-card green" onclick="navTo('science')">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>
+      <span><span class="b-t">口腔健康</span><br><span class="b-d">海量口腔科普 · 刷牙方法 · 辟谣</span></span>
+      <span class="arrow">›</span>
+    </button>
+    <button class="big-card gold" onclick="navTo('shop')">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+      <span><span class="b-t">健康商城</span><br><span class="b-d">示例推荐清单 · 推广/广告内容请理性选择</span></span>
+      <span class="arrow">›</span>
+    </button>
+    
+    <button class="big-card purple" onclick="navTo('exchange')">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span><span class="b-t">星星兑换 & 小游戏</span><br><span class="b-d">用刷牙星星兑换海量主题、徽章，玩小游戏赚星星</span></span>
+      <span class="arrow">›</span>
+    </button>
+
+    <div class="card">
+      <h3><span class="dot"></span>今日记录</h3>
+      <div id="homeRecords"></div>
+    </div>
+    <div class="disclaimer">本工具内容仅供参考，非诊断，建议就医。数据仅保存在本地。</div>
+  </section>
+
+  <!-- ===== 习惯统计页 ===== -->
+  <section class="page" id="page-habits">
+    <div class="back-bar"><button onclick="navTo('home')">‹</button><span class="t">习惯统计</span></div>
+    
+    <div class="tab-switch">
+      <button id="tab-7d" class="active" onclick="switchChart('7d')">近 7 天</button>
+      <button id="tab-30d" onclick="switchChart('30d')">近 30 天</button>
+    </div>
+
+    <div class="card" id="card-chart-7d">
+      <h3><span class="dot"></span>刷牙时长分布</h3>
+      <div class="pie-chart-wrap">
+        <div class="pie-chart" id="pie7d"></div>
+        <div class="pie-legend" id="legend7d"></div>
+      </div>
+      <h3 style="margin-top:16px;"><span class="dot"></span>近 7 天完成情况</h3>
+      <div id="bars7d" class="chart-container"></div>
+    </div>
+
+    <div class="card hidden" id="card-chart-30d">
+      <h3><span class="dot"></span>近 30 天刷牙时长</h3>
+      <div class="line-chart-box" id="line30d"></div>
+      <div id="stat30d" class="hint" style="text-align:center;margin-top:8px;"></div>
+    </div>
+
+    <div class="card" id="remindSec">
+      <h3><span class="dot"></span>提醒设置</h3>
+      <div class="form-row"><label>早上</label><input type="time" id="remMorning"></div>
+      <div class="form-row"><label>晚上</label><input type="time" id="remEvening"></div>
+      <button class="btn primary" onclick="saveReminders()">保存提醒时间</button>
+    </div>
+  </section>
+
+  <!-- ===== 星星兑换页 ===== -->
+  <section class="page" id="page-exchange">
+    <div class="back-bar"><button onclick="navTo('home')">‹</button><span class="t">星星兑换</span></div>
+    
+    <div class="card" style="text-align: center; background: linear-gradient(135deg, #fffdf5, #fff6e0); border: 1px solid #ffe08a;">
+      <div style="font-size: 14px; color: #8a5a00;">当前可用星星</div>
+      <div style="font-size: 32px; font-weight: 800; color: #c77700; margin-top: 4px;" id="exchangeTotalStars">0</div>
+      <div class="hint" style="color: #a87900;">累计总星星减去已兑换消耗</div>
+    </div>
+
+    <button class="btn" style="background: linear-gradient(135deg, #a855f7, #7e22ce); color: #fff; font-size: 16px; font-weight: bold; margin: 16px 0; padding: 14px; box-shadow: 0 4px 12px rgba(126,34,206,0.3);" onclick="startGame()">
+      🎮 玩“护牙大作战”赚额外星星
+    </button>
+
+    <h3 style="font-size: 16px; margin: 16px 0 8px 4px;">专属徽章</h3>
+    <div class="badge-grid" id="badgeGridHome"></div>
+
+    <h3 style="font-size: 16px; margin: 20px 0 8px 4px;">趣味主题</h3>
+    <div class="exchange-grid" id="themeGrid"></div>
+  </section>
+
+  <!-- ===== 科普页 ===== -->
+  <section class="page" id="page-science">
+    <div class="back-bar"><button onclick="navTo('home')">‹</button><span class="t">口腔健康科普</span></div>
+    <div class="sci-grid" id="sciGrid"></div>
+    <div class="disclaimer" style="margin-bottom: 12px;">所有内容仅供参考，非诊断，建议就医。</div>
+    <button class="btn" style="background: #000; color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="openExternal('douyin')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3h2.5a6.5 6.5 0 0 0 6 6v3a9.5 9.5 0 0 1-6-2.1v7.6a6.5 6.5 0 1 1-6.5-6.5c.3 0 .7 0 1 .1v3.1a3.5 3.5 0 1 0 2.5 3.3V3z"/></svg>
+      去抖音看更多口腔科普
+    </button>
+  </section>
+
+  <!-- ===== 科普详情 ===== -->
+  <section class="page" id="page-sci-detail">
+    <div class="back-bar"><button onclick="navTo('science')">‹</button><span class="t" id="sciDetailTitle">详情</span></div>
+    <div class="card sci-detail" id="sciDetailBody"></div>
+  </section>
+
+  <!-- ===== 商城页 ===== -->
+  <section class="page" id="page-shop">
+    <div class="back-bar"><button onclick="navTo('home')">‹</button><span class="t">健康商城推荐</span></div>
+    <div id="shopList"></div>
+  </section>
+
+  <!-- ===== 我的页 ===== -->
+  <section class="page" id="page-mine">
+    <div class="back-bar"><button onclick="navTo('home')">‹</button><span class="t">我的</span></div>
+    
+    <div class="brand-header" style="padding: 20px; border-radius: 16px; margin-bottom: 16px;">
+      <div class="css-logo-wrap">
+        <div class="css-tooth-box" style="width: 60px; height: 60px; border-radius: 18px; margin-bottom: 10px;">
+          <svg viewBox="0 0 24 24" style="width: 38px; height: 38px;">
+            <path d="M12,1.5 C7.5,1.5 4.5,4.5 4.5,9 C4.5,13 6,15.5 7,18.5 C7.8,20.8 8.2,22.5 9.5,22.5 C10.8,22.5 11,18.5 12,18.5 C13,18.5 13.2,22.5 14.5,22.5 C15.8,22.5 16.2,20.8 17,18.5 C18,15.5 19.5,13 19.5,9 C19.5,4.5 16.5,1.5 12,1.5 Z"/>
+            <circle cx="9" cy="9" r="1.3" fill="var(--blue)" />
+            <circle cx="15" cy="9" r="1.3" fill="var(--blue)" />
+          </svg>
+        </div>
+        <div class="css-title" style="font-size: 22px;">益口云</div>
+      </div>
+    </div>
+
+    <!-- 口腔档案 + 推荐科普 -->
+    <div class="card">
+      <h3><span class="dot"></span>口腔档案</h3>
+      <div class="form-row"><label>主要困扰</label>
+        <select id="pfIssue">
+          <option value="">请选择</option>
+          <option value="无">无明显困扰</option>
+          <option value="龋齿">龋齿/蛀牙</option>
+          <option value="牙周">牙龈出血/牙周炎</option>
+          <option value="敏感">牙齿敏感</option>
+          <option value="正畸">正在正畸</option>
+          <option value="美白">牙齿发黄</option>
+          <option value="口臭">口臭</option>
+        </select>
+      </div>
+      <button class="btn primary" onclick="saveProfile()">保存档案</button>
+      <div id="profileRecommend" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>已解锁徽章</h3>
+      <div class="badge-grid" id="badgeGridMine"></div>
+    </div>
+
+    <details class="note"><summary>隐私说明</summary><div class="nb">所有数据仅保存在本地浏览器（localStorage），不会上传服务器。</div></details>
+    <button class="btn danger" onclick="askClear()">清除全部数据</button>
+  </section>
+
+  <!-- ===== 刷牙计时（全屏） ===== -->
+  <section class="overlay" id="timerOverlay">
+    <div class="timer-head">
+      <div class="side"><button class="tbtn" onclick="exitTimer()">退出</button></div>
+      <div style="font-size:15px;font-weight:700;color:var(--blue)">刷牙计时</div>
+      <div class="side"><button class="tbtn" id="musicBtn" onclick="toggleMusic()">♪ 音乐</button></div>
+    </div>
+    <div class="ring-wrap" id="ringWrap">
+      <svg class="ring" width="230" height="230" viewBox="0 0 230 230">
+        <circle class="ring-track" cx="115" cy="115" r="95"/>
+        <circle class="ring-prog" id="ringProg" cx="115" cy="115" r="95"/>
+      </svg>
+      <div class="star-node" id="starN0">★</div>
+      <div class="star-node" id="starN1">★</div>
+      <div class="star-node" id="starN2">★</div>
+      <div class="ring-center">
+        <div class="time-big" id="timerText">00:00</div>
+        <div class="time-sub">已刷 / 目标 03:00</div>
+      </div>
+    </div>
+    <div class="zone-text">当前重点：<b id="zoneText">左上区</b></div>
+    <div class="zones" id="zonesWrap">
+      <button class="zone" data-z="0">左上</button>
+      <button class="zone" data-z="1">右上</button>
+      <button class="zone" data-z="2">左下</button>
+      <button class="zone" data-z="3">右下</button>
+      <button class="zone" data-z="4">咬合</button>
+    </div>
+    <div class="timer-actions">
+      <button class="btn primary" id="pauseBtn" onclick="togglePause()">暂停</button>
+    </div>
+  </section>
+
+  <!-- ===== 完成页 ===== -->
+  <section class="overlay" id="doneOverlay" style="z-index:70">
+    <div class="done-card">
+      <div class="done-stars" id="doneStars">★★★</div>
+      <div class="done-title" id="doneTitle">刷牙完成</div>
+      <div class="done-sub" id="doneSub"></div>
+      <div class="done-stats">
+        <div class="ds"><div class="d1" id="doneDur">--</div><div class="d2">有效时长</div></div>
+        <div class="ds"><div class="d1" id="doneToday">--</div><div class="d2">今日总星星</div></div>
+        <div class="ds"><div class="d1" id="doneStreak">--</div><div class="d2">连续天数</div></div>
+      </div>
+      <button class="btn star" onclick="navTo('exchange')" style="margin-bottom:10px">去兑换星星奖励</button>
+      <button class="btn primary" onclick="closeDone()">返回首页</button>
+    </div>
+  </section>
+
+  <!-- ===== 底部导航 ===== -->
+  <nav id="nav">
+    <button class="nav-item active" data-p="home" onclick="navTo('home')"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>首页</button>
+    <button class="nav-item" data-p="habits" onclick="navTo('habits')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>习惯</button>
+    <button class="nav-item" data-p="science" onclick="navTo('science')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>科普</button>
+    <button class="nav-item" data-p="shop" onclick="navTo('shop')"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>商城</button>
+    <button class="nav-item" data-p="mine" onclick="navTo('mine')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>我的</button>
+  </nav>
+
+  <div class="modal-mask" id="modalMask">
+    <div class="modal">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-msg" id="modalMsg"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="modalCancel">取消</button>
+        <button class="btn primary" id="modalOk">确定</button>
+      </div>
+    </div>
+  </div>
+  <div id="toast"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ===== 存储 ===== */
+var mem = {};
+function storeGet(key, def){try{var v=window.localStorage.getItem(key);if(v!==null)return JSON.parse(v)}catch(e){}if(mem[key]!==undefined)return mem[key];return def}
+function storeSet(key,val){mem[key]=val;try{window.localStorage.setItem(key,JSON.stringify(val))}catch(e){}}
+function storeDel(key){delete mem[key];try{window.localStorage.removeItem(key)}catch(e){}}
+function storeClearAll(){var keys=['yyx_profile','yyx_reminders','yyx_records','yyx_shop','yyx_unlocked','yyx_equipped','yyx_bonus'];for(var i=0;i<keys.length;i++)storeDel(keys[i])}
+
+/* ===== 日期 ===== */
+function pad(n){return (n<10?'0':'')+n}
+function fmtDate(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayStr(){return fmtDate(new Date())}
+function fmtMs(ms){ms=Math.max(0,Math.floor(ms/1000));return pad(Math.floor(ms/60))+':'+pad(ms%60)}
+
+/* ===== 数据 ===== */
+function getRecords(){return storeGet('yyx_records',{})}
+function getTodayRecs(){var recs=getRecords();return(recs&&recs[todayStr()])?recs[todayStr()]:[]}
+function todayCount(){return getTodayRecs().length}
+function todayStars(){var arr=getTodayRecs(),s=0;for(var i=0;i<arr.length;i++)s+=(arr[i].stars||0);return s}
+
+function calcTotalStars(){
+  var recs=getRecords();var total=0;
+  for(var k in recs){ if(recs.hasOwnProperty(k)){ for(var i=0;i<recs[k].length;i++){ total += (recs[k][i].stars||0); } } }
+  var bonus = storeGet('yyx_bonus', 0);
+  return total + bonus;
+}
+function calcSpentStars(){
+  var unlocked = storeGet('yyx_unlocked', []);
+  var spent = 0;
+  for(var i=0;i<unlocked.length;i++){
+    var item = ALL_ITEMS.find(function(x){return x.id === unlocked[i]});
+    if(item) spent += item.cost;
+  }
+  return spent;
+}
+function availableStars(){
+  return Math.max(0, calcTotalStars() - calcSpentStars());
+}
+
+function calcStreak(){var recs=getRecords();var d=new Date();var hasToday=recs[fmtDate(d)]&&recs[fmtDate(d)].length;var cur=hasToday?new Date(d.getTime()):new Date(d.getTime()-86400000);var s=0;while(true){var arr=recs[fmtDate(cur)];if(arr&&arr.length){s++;cur=new Date(cur.getTime()-86400000)}else break}return s}
+function getReminders(){var r=storeGet('yyx_reminders',{});if(!r||typeof r!=='object'||!r.morning||!r.evening)return{morning:'07:30',evening:'22:30'};return r}
+
+/* ===== 兑换商城数据 ===== */
+var ALL_ITEMS = [
+  { id: 'b1', type: 'badge', name: '青铜护齿', icon: '🥉', desc: '累计刷牙10颗星', cost: 3 },
+  { id: 'b2', type: 'badge', name: '白银先锋', icon: '🥈', desc: '累计刷牙20颗星', cost: 5 },
+  { id: 'b3', type: 'badge', name: '黄金卫士', icon: '🥇', desc: '累计刷牙30颗星', cost: 8 },
+  { id: 'b4', type: 'badge', name: '钻石大使', icon: '💎', desc: '累计刷牙50颗星', cost: 15 },
+  { id: 'b5', type: 'badge', name: '王者之牙', icon: '👑', desc: '累计刷牙100颗星', cost: 30 },
+  { id: 'b6', type: 'badge', name: '火焰卫士', icon: '🔥', desc: '连续打卡7天', cost: 10 },
+  { id: 'b7', type: 'badge', name: '星空守护', icon: '🌌', desc: '专属高阶徽章', cost: 20 },
+  { id: 'b8', type: 'badge', name: '终极口腔', icon: '🦷', desc: '口腔守护神', cost: 40 },
+  { id: 't1', type: 'theme', name: '默认蓝', icon: '🔵', desc: '清新基础蓝', cost: 0, class: 'theme-1' },
+  { id: 't2', type: 'theme', name: '海洋之心', icon: '🌊', desc: '清爽海洋蓝', cost: 3, class: 'theme-2' },
+  { id: 't3', type: 'theme', name: '落日余晖', icon: '🌅', desc: '温暖橘色', cost: 3, class: 'theme-3' },
+  { id: 't4', type: 'theme', name: '森林秘境', icon: '🌲', desc: '护眼绿色', cost: 4, class: 'theme-4' },
+  { id: 't5', type: 'theme', name: '紫罗兰', icon: '🔮', desc: '神秘紫色', cost: 5, class: 'theme-5' },
+  { id: 't6', type: 'theme', name: '樱花粉', icon: '🌸', desc: '少女粉色', cost: 5, class: 'theme-6' },
+  { id: 't7', type: 'theme', name: '炽热红', icon: '🔥', desc: '热情红色', cost: 6, class: 'theme-7' },
+  { id: 't8', type: 'theme', name: '黄金甲', icon: '🌻', desc: '尊贵金色', cost: 8, class: 'theme-8' },
+  { id: 't9', type: 'theme', name: '翡翠青', icon: '🍃', desc: '沉静青色', cost: 8, class: 'theme-9' },
+  { id: 't10', type: 'theme', name: '极简灰', icon: '🌫️', desc: '高冷灰色', cost: 10, class: 'theme-10' },
+  { id: 't11', type: 'theme', name: '活力橙', icon: '🍊', desc: '动感橙色', cost: 10, class: 'theme-11' },
+  { id: 't12', type: 'theme', name: '天空蓝', icon: '☁️', desc: '明亮青蓝', cost: 12, class: 'theme-12' },
+  { id: 't13', type: 'theme', name: '星空蓝', icon: '✨', desc: '深邃星空', cost: 15, class: 'theme-13' },
+  { id: 't14', type: 'theme', name: '薄荷绿', icon: '🌱', desc: '清凉薄荷', cost: 15, class: 'theme-14' },
+  { id: 't15', type: 'theme', name: '玫瑰金', icon: '🌹', desc: '高雅玫瑰', cost: 20, class: 'theme-15' }
+];
+
+function renderExchange() {
+  var avail = availableStars();
+  $('exchangeTotalStars').textContent = avail;
+  
+  var unlocked = storeGet('yyx_unlocked', []);
+  var equipped = storeGet('yyx_equipped', 't1');
+  
+  var badgeHtml = '';
+  ALL_ITEMS.filter(function(x){return x.type==='badge'}).forEach(function(item){
+    var isOwned = unlocked.indexOf(item.id) > -1;
+    var btnHtml = '';
+    if(isOwned) {
+      btnHtml = '<button class="btn ghost" disabled>已拥有</button>';
+    } else {
+      var canBuy = avail >= item.cost;
+      btnHtml = '<button class="btn '+(canBuy?'star':'ghost')+'" '+(canBuy?'':'disabled')+' onclick="buyItem(\''+item.id+'\')">' + (canBuy ? item.cost + ' 星星兑换' : '星星不足') + '</button>';
+    }
+    badgeHtml += '<div class="badge" style="'+(isOwned?'border-color:var(--star); background:#fffdf5;':'')+'">' +
+      '<div class="bi" style="font-size:28px;">'+item.icon+'</div>' +
+      '<div class="bn">'+item.name+'</div>' +
+      '<div class="bd" style="margin-bottom:8px;">'+item.desc+'</div>' +
+      btnHtml + '</div>';
+  });
+  $('badgeGridHome').innerHTML = badgeHtml;
+
+  var themeHtml = '';
+  ALL_ITEMS.filter(function(x){return x.type==='theme'}).forEach(function(item){
+    var isOwned = unlocked.indexOf(item.id) > -1 || item.cost === 0;
+    var isEquipped = equipped === item.id;
+    var btnHtml = '';
+    if(isEquipped) {
+      btnHtml = '<button class="btn ghost" disabled>使用中</button>';
+    } else if(isOwned) {
+      btnHtml = '<button class="btn primary" onclick="equipItem(\''+item.id+'\')">点击应用</button>';
+    } else {
+      var canBuy = avail >= item.cost;
+      btnHtml = '<button class="btn '+(canBuy?'star':'ghost')+'" '+(canBuy?'':'disabled')+' onclick="buyItem(\''+item.id+'\')">' + (canBuy ? item.cost + ' 星星兑换' : '星星不足') + '</button>';
+    }
+    themeHtml += '<div class="exchange-item '+(isEquipped?'equipped':(isOwned?'owned':''))+'">' +
+      '<div class="ex-icon">'+item.icon+'</div>' +
+      '<div class="ex-name">'+item.name+'</div>' +
+      '<div class="ex-desc">'+item.desc+'</div>' +
+      btnHtml + '</div>';
+  });
+  $('themeGrid').innerHTML = themeHtml;
+}
+
+function buyItem(id) {
+  var item = ALL_ITEMS.find(function(x){return x.id === id});
+  if(!item) return;
+  
+  if(availableStars() < item.cost) { 
+    toast('星星不足，继续努力刷牙或玩游戏吧！'); 
+    return; 
+  }
+  
+  confirmModal('确认兑换', '确定消耗 ' + item.cost + ' 颗星星兑换「' + item.name + '」吗？', '确认兑换', function(ok){
+    if(!ok) return;
+    var unlocked = storeGet('yyx_unlocked', []);
+    unlocked.push(id);
+    storeSet('yyx_unlocked', unlocked);
+    toast('兑换成功！');
+    if(item.type === 'theme') {
+      equipItem(id);
+    } else {
+      renderExchange();
+      renderMine();
+      renderHome();
+    }
+  });
+}
+
+function equipItem(id) {
+  storeSet('yyx_equipped', id);
+  applyTheme(id);
+  renderExchange();
+  toast('主题已应用');
+}
+
+function applyTheme(id) {
+  document.body.className = '';
+  var item = ALL_ITEMS.find(function(x){return x.id === id});
+  if(item && item.class) {
+    document.body.classList.add(item.class);
+  }
+}
+function initTheme() {
+  var equipped = storeGet('yyx_equipped', 't1');
+  applyTheme(equipped);
+}
+
+/* ===== 习惯统计图表 ===== */
+function renderHabits() {
+  window.switchChart = function(tab) {
+    document.getElementById('tab-7d').classList.toggle('active', tab === '7d');
+    document.getElementById('tab-30d').classList.toggle('active', tab === '30d');
+    document.getElementById('card-chart-7d').classList.toggle('hidden', tab !== '7d');
+    document.getElementById('card-chart-30d').classList.toggle('hidden', tab !== '30d');
+    if(tab === '7d') render7dCharts();
+    else render30dLine();
+  };
+
+  function render7dCharts() {
+    var recs = getRecords();
+    var d = new Date();
+    var days = [];
+    for(var i=6;i>=0;i--) {
+      var dt = new Date(d.getTime()-i*86400000);
+      var k = fmtDate(dt);
+      days.push({ date: k, label: (i===0?'今':(dt.getMonth()+1)+'/'+dt.getDate()), recs: (recs[k]||[]) });
+    }
+
+    var durationMorning = 0, durationNoon = 0, durationEvening = 0;
+    days.forEach(function(day){
+      day.recs.forEach(function(r){
+        var h = new Date(r.start).getHours();
+        if(h < 11) durationMorning += r.duration;
+        else if(h < 17) durationNoon += r.duration;
+        else durationEvening += r.duration;
+      });
+    });
+    var totalDur = durationMorning + durationNoon + durationEvening;
+    if(totalDur === 0) totalDur = 1;
+    
+    var p1 = (durationMorning / totalDur * 100).toFixed(1);
+    var p2 = ((durationMorning + durationNoon) / totalDur * 100).toFixed(1);
+    
+    var pie = document.getElementById('pie7d');
+    pie.style.setProperty('--p1', p1 + '%');
+    pie.style.setProperty('--p2', p2 + '%');
+    
+    document.getElementById('legend7d').innerHTML = 
+      '<span><i style="background:var(--blue)"></i>早：' + Math.round(durationMorning/60) + ' 分</span>' +
+      '<span><i style="background:var(--blue2)"></i>午：' + Math.round(durationNoon/60) + ' 分</span>' +
+      '<span><i style="background:var(--star)"></i>晚：' + Math.round(durationEvening/60) + ' 分</span>';
+
+    var barsHtml = '';
+    days.forEach(function(day){
+      var count = day.recs.length;
+      var pct = Math.min(100, count / 3 * 100);
+      barsHtml += '<div class="chart-bar-row"><div class="lbl">' + day.label + '</div>' +
+        '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<div style="width:30px;text-align:right;">' + count + '/3</div></div>';
+    });
+    document.getElementById('bars7d').innerHTML = barsHtml || '<div class="empty">暂无数据</div>';
+  }
+
+  function render30dLine() {
+    var recs = getRecords();
+    var d = new Date();
+    var dataPoints = [];
+    var maxDur = 180;
+    var totalDur30 = 0;
+
+    for(var i=29;i>=0;i--) {
+      var dt = new Date(d.getTime()-i*86400000);
+      var k = fmtDate(dt);
+      var dayRecs = recs[k] || [];
+      var dayTotalDur = 0;
+      dayRecs.forEach(function(r){ dayTotalDur += r.duration; });
+      if(dayTotalDur > maxDur) maxDur = dayTotalDur;
+      totalDur30 += dayTotalDur;
+      dataPoints.push({ date: k, dur: dayTotalDur, label: (dt.getMonth()+1)+'/'+dt.getDate() });
+    }
+
+    var w = 300, h = 160;
+    var padLeft = 30, padRight = 10, padTop = 10, padBottom = 20;
+    var innerW = w - padLeft - padRight;
+    var innerH = h - padTop - padBottom;
+    
+    var points = dataPoints.map(function(p, idx){
+      var x = padLeft + (idx / 29) * innerW;
+      var y = padTop + innerH - (p.dur / maxDur) * innerH;
+      return { x: x, y: y, label: p.label, val: Math.round(p.dur/60) };
+    });
+
+    var pathD = points.map(function(p, i){ return (i===0?'M':'L') + p.x + ' ' + p.y; }).join(' ');
+
+    var gridHtml = '';
+    for(var i=0; i<=4; i++) {
+      var y = padTop + (i/4)*innerH;
+      var val = Math.round((1 - i/4) * maxDur / 60);
+      gridHtml += '<line x1="'+padLeft+'" y1="'+y+'" x2="'+(w-padRight)+'" y2="'+y+'" stroke="var(--line)" stroke-dasharray="2 2"/>';
+      gridHtml += '<text x="'+(padLeft-4)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" fill="var(--muted)">'+val+'m</text>';
+    }
+    
+    var xLabels = '';
+    [0, 9, 19, 29].forEach(function(idx){
+      if(points[idx]) xLabels += '<text x="'+points[idx].x+'" y="'+(h-4)+'" text-anchor="middle" font-size="10" fill="var(--muted)">'+points[idx].label+'</text>';
+    });
+
+    var svg = '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">' +
+      gridHtml + xLabels +
+      '<path d="'+pathD+'" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      points.map(function(p){ return '<circle cx="'+p.x+'" cy="'+p.y+'" r="2.5" fill="#fff" stroke="var(--blue)" stroke-width="1.5"><title>'+p.label+' 共'+p.val+'分钟</title></circle>'; }).join('') +
+      '</svg>';
+      
+    document.getElementById('line30d').innerHTML = svg;
+    document.getElementById('stat30d').textContent = '近 30 天累计刷牙时长：' + (totalDur30/60).toFixed(1) + ' 分钟';
+  }
+
+  render7dCharts();
+}
+
+function saveReminders(){
+  var m=$('remMorning').value,e=$('remEvening').value;
+  if(!m||!e){toast('请选择早晚提醒时间');return}
+  storeSet('yyx_reminders',{morning:m,evening:e});
+  toast('提醒时间已保存');
+  renderHome();
+}
+
+/* ===== 小游戏系统 ===== */
+var gameInterval, gameSpawner, gameTimeLeft, gameCurrentScore, gameActive = false;
+
+function startGame() {
+  $('gameOverlay').classList.add('active');
+  $('gameScore').textContent = '0';
+  gameCurrentScore = 0;
+  gameTimeLeft = 30;
+  $('gameTime').textContent = gameTimeLeft;
+  $('gameArea').innerHTML = '';
+  gameActive = true;
+  
+  gameInterval = setInterval(function(){
+    gameTimeLeft--;
+    $('gameTime').textContent = gameTimeLeft;
+    if(gameTimeLeft <= 0) endGame();
+  }, 1000);
+
+  gameSpawner = setInterval(function(){
+    if(!gameActive) return;
+    spawnGameItem();
+  }, 600);
+}
+
+function spawnGameItem() {
+  var area = $('gameArea');
+  var isBad = Math.random() < 0.3;
+  var el = document.createElement('div');
+  el.className = 'game-item ' + (isBad ? 'bad' : 'good');
+  
+  var goodEmojis = ['🍎', '🥕', '🪥', '💧', '🥦', '🍌'];
+  var badEmojis = ['🦠', '🦷', '🍬', '🥤', '🍭'];
+  
+  el.textContent = isBad ? badEmojis[Math.floor(Math.random()*badEmojis.length)] : goodEmojis[Math.floor(Math.random()*goodEmojis.length)];
+  
+  var areaW = area.clientWidth;
+  var areaH = area.clientHeight;
+  var x = Math.random() * (areaW - 60);
+  var y = Math.random() * (areaH - 60);
+  
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  
+  el.onclick = function(e) {
+    e.stopPropagation();
+    if(isBad) {
+      gameCurrentScore = Math.max(0, gameCurrentScore - 1);
+      el.textContent = '💥';
+    } else {
+      gameCurrentScore += 1;
+      el.textContent = '✨';
+    }
+    $('gameScore').textContent = gameCurrentScore;
+    el.style.pointerEvents = 'none';
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 200);
+  };
+  
+  area.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 2000);
+}
+
+function endGame() {
+  gameActive = false;
+  clearInterval(gameInterval);
+  clearInterval(gameSpawner);
+  $('gameArea').innerHTML = '';
+  
+  var earnedStars = Math.floor(gameCurrentScore / 5);
+  if(earnedStars > 0) {
+    var bonus = storeGet('yyx_bonus', 0);
+    storeSet('yyx_bonus', bonus + earnedStars);
+    toast('游戏结束！得分 ' + gameCurrentScore + '，获得 ' + earnedStars + ' 颗额外星星！');
+  } else {
+    toast('游戏结束！得分 ' + gameCurrentScore + '，下次争取拿星！');
+  }
+  
+  setTimeout(function(){ $('gameOverlay').classList.remove('active'); renderExchange(); renderHome(); }, 1500);
+}
+function closeGame() {
+  gameActive = false;
+  clearInterval(gameInterval);
+  clearInterval(gameSpawner);
+  $('gameOverlay').classList.remove('active');
+  $('gameArea').innerHTML = '';
+  renderExchange();
+  renderHome();
+}
+
+/* ===== 页面交互 ===== */
+function $(id){return document.getElementById(id)}
+var toastTimer=null;
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},2400)}
+var modalResolve=null;
+function confirmModal(title,msg,okLabel,cb){$('modalTitle').textContent=title||'确认';$('modalMsg').textContent=msg||'';$('modalOk').textContent=okLabel||'确定';modalResolve=cb;$('modalMask').classList.add('show')}
+$('modalOk').addEventListener('click',function(){$('modalMask').classList.remove('show');var cb=modalResolve;modalResolve=null;if(cb)cb(true)});
+$('modalCancel').addEventListener('click',function(){$('modalMask').classList.remove('show');var cb=modalResolve;modalResolve=null;if(cb)cb(false)});
+
+var PAGE_ORDER=['home','exchange','habits','science','sci-detail','shop','mine'];
+function navTo(p){
+  if(p==='timer'||p==='done')return;
+  for(var i=0;i<PAGE_ORDER.length;i++){var el=$('page-'+PAGE_ORDER[i]);if(el)el.classList.toggle('active',PAGE_ORDER[i]===p)}
+  var navs=document.querySelectorAll('#nav .nav-item');
+  var mainP=(p==='sci-detail'||p==='exchange')?'home':p;
+  for(var j=0;j<navs.length;j++){navs[j].classList.toggle('active',navs[j].getAttribute('data-p')===mainP)}
+  
+  if(p==='home')renderHome();
+  if(p==='exchange')renderExchange();
+  if(p==='habits'){window.switchChart('7d');}
+  if(p==='science')renderScience();
+  if(p==='shop')renderShop();
+  if(p==='mine')renderMine();
+  window.scrollTo(0,0);
+}
+
+function renderHome(){
+  var stars=todayStars(),cnt=todayCount();
+  $('homeStats').innerHTML='<div class="stat"><div class="v star-c">'+stars+'/9 ★</div><div class="l">今日已获得</div></div>'+'<div class="stat"><div class="v">'+cnt+'/3</div><div class="l">今日已完成(次)</div></div>'+'<div class="stat"><div class="v">'+nextReminderText()+'</div><div class="l">下次提醒</div></div>'+'<div class="stat"><div class="v">'+calcStreak()+' 天</div><div class="l">连续打卡</div></div>';
+  var arr=getTodayRecs();var slots=[[],[],[]];for(var i=0;i<arr.length;i++){var s=slotOf(arr[i].start);slots[s].push(arr[i])}var names=['早','午','晚'];var html='';for(var j=0;j<3;j++){var list=slots[j];if(list.length){var dur=0,st=0;for(var k=0;k<list.length;k++){dur+=list[k].duration;st+=(list[k].stars||0)}html+='<div class="record-row"><span class="slot">'+names[j]+'刷</span><span class="val">已刷 '+fmtMs(dur)+'</span><span class="stars">★ '+st+'</span></div>'}else{html+='<div class="record-row"><span class="slot">'+names[j]+'刷</span><span class="val" style="color:#b7c2d6">未刷</span><span class="stars">★ 0</span></div>'}}
+  $('homeRecords').innerHTML=html;
+}
+function nextReminderText(){var r=getReminders();var now=new Date();var hm=pad(now.getHours())+':'+pad(now.getMinutes());if(hm<r.morning)return r.morning;if(hm<r.evening)return r.evening;return r.morning+'（次日）'}
+function slotOf(startIso){var d=new Date(startIso);var h=d.getHours();if(h<11)return 0;if(h<17)return 1;return 2}
+
+/* ===== 计时与音乐 ===== */
+var ZONES=['左上区','右上区','左下区','右下区','咬合面','舌侧区'];var RING_C=2*Math.PI*95;
+var timer={running:false,paused:false,base:0,resumeTs:0,finished:false,saved:false,zoneShift:0,startIso:'',raf:0,lit:[false,false,false]};
+function effNow(){if(!timer.running)return timer.base;return timer.base+(performance.now()-timer.resumeTs)}
+function positionStars(){var wrap=$('ringWrap');var cx=wrap.clientWidth/2,cy=wrap.clientHeight/2,r=Math.min(cx,cy)-32;var fracs=[1/3,2/3,1];for(var i=0;i<3;i++){var ang=(-90+fracs[i]*360)*Math.PI/180;var x=cx+r*Math.cos(ang),y=cy+r*Math.sin(ang);var n=$('starN'+i);n.style.left=x+'px';n.style.top=y+'px'}}
+
+function openTimer(){
+  var cnt=todayCount();if(cnt>=3){toast('今日已完成 3 次，避免过度刷牙');return}
+  if(timer.running||timer.paused)return;
+  timer={running:true,paused:false,base:0,resumeTs:performance.now(),finished:false,saved:false,zoneShift:0,startIso:new Date().toISOString(),raf:0,lit:[false,false,false]};
+  $('timerOverlay').classList.add('active');
+  $('doneOverlay').classList.remove('active');
+  positionStars();updateUI(0);updatePauseBtn();updateMusicBtn();
+  
+  if(!musicOn) { musicOn = true; }
+  startMusic();
+
+  if(timer.raf)cancelAnimationFrame(timer.raf);
+  tick();
+}
+
+function tick(){
+  if(timer.running){
+    var eff=effNow();
+    if(eff>=180000&&!timer.finished){timer.finished=true;timer.running=false;timer.base=180000;settleSession();return}
+    updateUI(eff);
+  }else if(timer.paused||timer.finished){
+    updateUI(timer.base);
+  }
+  timer.raf=requestAnimationFrame(tick);
+}
+
+var lastZone = 0;
+function updateUI(eff){
+  $('timerText').textContent=fmtMs(eff);
+  var prog=Math.min(1,eff/180000);
+  var arc=$('ringProg');
+  arc.setAttribute('stroke-dasharray',RING_C.toFixed(2));
+  arc.setAttribute('stroke-dashoffset',(RING_C*(1-prog)).toFixed(2));
+  
+  for(var i=0;i<3;i++){
+    var lit=eff>=(i+1)*60000;
+    if(lit&&!timer.lit[i]){timer.lit[i]=true}
+    $('starN'+i).classList.toggle('lit',timer.lit[i]||lit);
+  }
+  
+  var z = (Math.floor(eff/30000) + timer.zoneShift) % 6;
+  $('zoneText').textContent=ZONES[z];
+  var sq=document.querySelectorAll('#zonesWrap .zone');
+  for(var j=0;j<sq.length;j++){
+    var idx=parseInt(sq[j].getAttribute('data-z'),10);
+    sq[j].classList.toggle('active',z===idx);
+    sq[j].classList.toggle('done',idx<z);
+  }
+  
+  if(z !== lastZone) {
+    lastZone = z;
+    if(musicOn && timer.running) nextMusicTrack();
+  }
+}
+
+function updatePauseBtn(){var b=$('pauseBtn');if(timer.finished)b.textContent='已完成';else if(timer.running)b.textContent='暂停';else if(timer.paused)b.textContent='继续';else b.textContent='暂停'}
+function togglePause(){if(timer.finished)return;if(timer.running){timer.base=effNow();timer.running=false;timer.paused=true;stopMusic();toast('已暂停')}else if(timer.paused){timer.resumeTs=performance.now();timer.running=true;timer.paused=false;if(musicOn)startMusic();toast('继续计时')}updatePauseBtn()}
+function zoneDone(){if(!timer.running){toast('请先继续计时');return}timer.zoneShift++;toast('已刷到，进入下一区');updateUI(effNow())}
+document.getElementById('zonesWrap').addEventListener('click',function(ev){var b=ev.target;while(b&&!(b.getAttribute&&b.getAttribute('data-z')!==null))b=b.parentNode;if(!b||!b.getAttribute)return;zoneDone()});
+
+function exitTimer(){
+  confirmModal('退出计时','退出后按当前有效时长结算；未满 60 秒不计次数、不给星。确定退出吗？','退出',function(ok){
+    if(!ok)return;
+    stopMusic(); musicOn = false; updateMusicBtn();
+    if(!timer.saved){
+      var eff=Math.min(effNow(),180000);
+      timer.running=false;timer.paused=false;timer.finished=timer.finished||(eff>=180000);timer.base=eff;
+      settleSession();
+    }else{showDone()}
+  });
+}
+
+function settleSession(){
+  if(timer.saved)return;
+  timer.saved=true;
+  var eff=Math.min(effNow(),180000);
+  var today=todayStr();
+  var recs=getRecords();
+  if(!recs[today])recs[today]=[];
+  var dayRecs=recs[today];
+  var ts=0;
+  for(var i=0;i<dayRecs.length;i++)ts+=(dayRecs[i].stars||0);
+  var counted=false;
+  if(eff>=60000&&dayRecs.length<3){
+    var stars=Math.min(3,Math.floor(eff/60000));
+    stars=Math.min(stars,Math.max(0,9-ts));
+    dayRecs.push({start:timer.startIso,end:new Date().toISOString(),duration:Math.round(eff),stars:stars,completed:timer.finished});
+    recs[today]=dayRecs;
+    storeSet('yyx_records',recs);
+    counted=true;
+  }
+  showDone(counted,eff);
+}
+
+function showDone(counted,eff){
+  $('timerOverlay').classList.remove('active');
+  var stars=0;
+  if(counted){stars=Math.min(3,Math.floor(eff/60000));if(eff>=180000)stars=3}
+  $('doneStars').textContent=counted?('★'.repeat(stars)+(stars<3?'★'.repeat(3-stars).split('').map(function(){return '☆'}).join(''):'')):'☆☆☆';
+  if(!counted){
+    $('doneTitle').textContent='本次未计入';
+    $('doneSub').textContent='有效时长不足 60 秒，不计次数、不给星';
+  }else{
+    $('doneTitle').textContent=(timer.finished?'刷牙完成':'已结算');
+    $('doneSub').textContent='本次获得 '+stars+' 颗星'+(timer.finished?'，达成 3 分钟目标':'');
+  }
+  $('doneDur').textContent=fmtMs(eff);
+  $('doneToday').textContent=todayStars()+'/9';
+  $('doneStreak').textContent=calcStreak()+' 天';
+  $('doneOverlay').classList.add('active');
+  if(timer.raf)cancelAnimationFrame(timer.raf);
+}
+function closeDone(){$('doneOverlay').classList.remove('active');navTo('home')}
+
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden && timer.running && $('timerOverlay').classList.contains('active')){
+    timer.base=effNow();timer.running=false;timer.paused=true;
+    stopMusic(); updatePauseBtn(); toast('已暂停，后台不计时');
+  }
+});
+
+/* ===== 音乐系统 ===== */
+var audioCtx=null,musicTimer=null,nextNote=0,beatN=0,musicOn=false;
+var TRACKS = [
+  { bpm: 120, scale: [261.6, 329.6, 392.0, 523.3], type: 'triangle' },
+  { bpm: 90, scale: [220.0, 261.6, 329.6, 440.0], type: 'sine' },
+  { bpm: 130, scale: [293.7, 349.2, 440.0, 587.3], type: 'square' },
+  { bpm: 80, scale: [196.0, 246.9, 293.7, 392.0], type: 'sine' },
+  { bpm: 110, scale: [261.6, 311.1, 392.0, 466.2], type: 'triangle' },
+  { bpm: 140, scale: [329.6, 392.0, 493.9, 659.3], type: 'square' }
+];
+var currentTrack = 0;
+
+function initAudio(){try{if(!audioCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;audioCtx=new AC()}if(audioCtx.state==='suspended')audioCtx.resume();return true}catch(e){return false}}
+
+function toggleMusic(){
+  if(!musicOn){
+    if(!initAudio()){toast('音乐不可用');return}
+    musicOn=true;
+    if(timer.running) startMusic();
+    toast('音乐已开启');
+  }else{
+    musicOn=false;
+    stopMusic();
+    toast('音乐已关闭');
+  }
+  updateMusicBtn();
+}
+
+function startMusic(){
+  stopMusic();
+  if(!audioCtx) initAudio();
+  if(!audioCtx) return;
+  nextNote = audioCtx.currentTime + 0.05;
+  beatN = 0;
+  musicTimer = setInterval(scheduleMusic, 100);
+}
+
+function stopMusic(){
+  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
+}
+
+function nextMusicTrack(){
+  currentTrack = (currentTrack + 1) % TRACKS.length;
+  if(musicOn && timer.running) startMusic();
+}
+
+function updateMusicBtn(){
+  var b=$('musicBtn');
+  if(b) {
+    b.textContent = musicOn ? '♪ 音乐：开' : '♪ 音乐';
+    b.classList.toggle('on', musicOn);
+  }
+}
+
+function scheduleMusic(){
+  if(!audioCtx)return;
+  try{
+    var track = TRACKS[currentTrack];
+    var interval = 60 / track.bpm;
+    while(nextNote < audioCtx.currentTime + 0.35){
+      playBeat(nextNote, beatN, track);
+      beatN++;
+      nextNote += interval;
+    }
+  }catch(e){}
+}
+
+function playBeat(t, n, track){
+  if(n % 4 === 0) kick(t);
+  if(n % 4 === 2) hat(t);
+  var o = audioCtx.createOscillator();
+  var g = audioCtx.createGain();
+  o.type = track.type;
+  o.frequency.setValueAtTime(track.scale[n % track.scale.length], t);
+  g.gain.setValueAtTime(0.04, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start(t); o.stop(t + 0.22);
+}
+
+function kick(t){
+  if(!audioCtx)return;
+  var o=audioCtx.createOscillator();var g=audioCtx.createGain();
+  o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(55,t+0.1);
+  g.gain.setValueAtTime(0.15,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.12);
+  o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+0.14);
+}
+function hat(t){
+  if(!audioCtx)return;
+  var len=Math.floor(audioCtx.sampleRate*0.04);var buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate);var data=buf.getChannelData(0);
+  for(var i=0;i<len;i++)data[i]=(Math.random()*2-1)*(1-i/len);
+  var src=audioCtx.createBufferSource();src.buffer=buf;var g=audioCtx.createGain();
+  g.gain.setValueAtTime(0.04,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.04);
+  src.connect(g);g.connect(audioCtx.destination);src.start(t);
+}
+
+/* ===== 科普 ===== */
+var SCI=[
+  {id:'caries',t:'龋齿',intro:'龋病是细菌利用糖类产酸、缓慢破坏牙体硬组织的慢性疾病。',body:'<p><b>成因：</b>口腔中的致龋菌把食物中的糖发酵成酸，酸长期腐蚀牙釉质形成龋洞。</p><p><b>预防：</b>每天早晚用含氟牙膏刷牙、使用牙线、控制含糖零食频率、定期口腔检查。</p><p><b>提醒：</b>出现变色、疼痛或塞牙，请尽快就医，勿自行处理。</p>'},
+  {id:'perio',t:'牙周炎',intro:'牙龈红肿出血、牙周袋、牙槽骨吸收都属于牙周问题。',body:'<p><b>成因：</b>牙菌斑和牙结石长期堆积刺激牙龈，引发牙龈炎；未控制可发展为牙周炎。</p><p><b>预防：</b>正确刷牙 + 牙线/冲牙器 + 定期洗牙（通常每 6-12 个月一次）。</p>'},
+  {id:'brush',t:'刷牙方法',intro:'推荐巴氏刷牙法：刷毛与牙面成 45°，小幅度颤动，每天 2 次。',body:'<p><b>方法：</b>刷毛斜向牙龈与牙面成 45°角，在每个区域小幅水平颤动 10 次左右，依次覆盖上左、上右、下左、下右、咬合面与舌侧；刷完牙后用牙线清洁牙缝。</p>'},
+  {id:'sensitive',t:'牙齿敏感',intro:'吃冷热酸甜时牙齿刺痛，多是牙本质暴露引起。',body:'<p><b>原因：</b>牙龈萎缩、刷牙太用力导致牙颈部缺损、牙釉质磨损。</p><p><b>对策：</b>使用抗敏感牙膏，改用软毛牙刷，采用正确刷牙法，不要横向拉锯式刷牙。</p>'},
+  {id:'whitening',t:'牙齿美白',intro:'冷光美白、贴面、洗牙的区别是什么？',body:'<p>洗牙只能去结石，不能改变牙齿本色；冷光美白是化学漂白；贴面是修复。建议在专业医生指导下选择。</p>'},
+  {id:'wisdom',t:'智齿',intro:'智齿到底要不要拔？',body:'<p>如果智齿长歪、反复发炎（智齿冠周炎）、顶坏邻牙或引起囊肿，建议尽早拔除。拔牙前需要拍全景片评估。</p>'},
+  {id:'kids',t:'儿童口腔',intro:'乳牙龋齿需要治吗？',body:'<p>需要！乳牙龋坏会影响咀嚼和恒牙萌出。建议长出第一颗牙就开始刷牙，定期涂氟和窝沟封闭。</p>'},
+  {id:'pregnancy',t:'孕期口腔',intro:'怀孕期间能看牙吗？',body:'<p>孕中期（4-6个月）是相对安全的治疗期。孕期激素变化易引发妊娠期牙龈炎，更需注意口腔卫生。</p>'},
+  {id:'badbreath',t:'口臭',intro:'天天刷牙还是口臭怎么办？',body:'<p>80%以上口臭来源于口腔，如牙结石、牙周炎、舌苔过厚。建议洗牙、使用牙线、清洁舌苔。如果是胃肠道问题，需去消化科就诊。</p>'},
+  {id:'braces',t:'正畸护理',intro:'戴牙套期间怎么刷牙？',body:'<p>使用正畸专用牙刷、牙缝刷、冲牙器。每次饭后必须刷牙，避免托槽周围脱矿形成白斑。</p>'},
+  {id:'scaling',t:'洗牙',intro:'洗牙会把牙缝洗大吗？',body:'<p>不会。洗牙是去除牙齿表面的牙结石，原本被结石填满的牙缝暴露出来，才会产生“牙缝变大”的错觉。建议每年洗牙 1-2 次。</p>'},
+  {id:'halitosis',t:'牙结石',intro:'牙结石是怎么形成的？',body:'<p>唾液中的钙离子与牙菌斑结合，逐渐钙化变硬形成牙结石。只能通过洗牙和手工刮治去除。</p>'},
+  {id:'diet',t:'饮食与牙齿',intro:'吃什么对牙齿好？',body:'<p>多吃粗纤维食物（如蔬菜、苹果），有助于摩擦清洁牙面；少吃黏性甜食，喝完碳酸饮料后先用清水漱口，半小时后再刷牙。</p>'},
+  {id:'trauma',t:'牙外伤',intro:'牙齿磕断了怎么办？',body:'<p>如果是整颗牙齿脱落，立刻将其放入牛奶或生理盐水中，千万不要擦洗牙根，尽快在30分钟内就医再植。</p>'}
+];
+function renderScience(){
+  var html='';
+  for(var i=0;i<SCI.length;i++){
+    var s=SCI[i];
+    html+='<button class="sci-card" onclick="openSciDetail(\''+s.id+'\')"><div class="ic">'+s.t.charAt(0)+'</div><div class="st">'+s.t+'</div><div class="sd">'+s.intro+'</div></button>';
+  }
+  $('sciGrid').innerHTML=html;
+}
+function openSciDetail(id){
+  var s=null;
+  for(var i=0;i<SCI.length;i++)if(SCI[i].id===id)s=SCI[i];
+  if(!s)return;
+  $('sciDetailTitle').textContent=s.t;
+  var d=new Date();
+  var review=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  $('sciDetailBody').innerHTML='<h3 style="font-size:17px;margin-bottom:8px">'+s.t+'</h3>'+'<p style="color:var(--muted);font-size:13px;margin-bottom:10px">'+s.intro+'</p>'+s.body+'<div class="meta">来源：示例来源<br>审核日期：'+review+'<br>免责声明：本内容仅供参考，非诊断，建议就医。</div>';
+  navTo('sci-detail');
+}
+function openExternal(type){
+  if(type==='douyin'){
+    confirmModal('前往抖音','将打开抖音搜索“口腔健康科普”。是否继续？','去抖音',function(ok){
+      if(ok) window.open('https://www.douyin.com/search/%E5%8F%A3%E8%85%94%E5%81%A5%E5%BA%B7%E7%A7%91%E6%99%AE', '_blank');
+    });
+  }
+}
+
+/* ===== 商城 ===== */
+var PRODUCTS=[{id:'p1',name:'含氟牙膏',tags:['推广/广告'],fields:[['推荐理由','氟化物可增强牙釉质抗酸能力、抑制脱矿，帮助预防龋齿，是日常基础选择。'],['适用人群','3 岁以上人群；儿童请按年龄选择对应含氟量产品。'],['禁忌提示','对氟化物不耐受或医生明确限制者慎用。']]},{id:'p2',name:'软毛牙刷',tags:['推广/广告'],fields:[['推荐理由','软毛更易清洁龈缘与窝沟，减少对牙龈的机械损伤。'],['适用人群','绝大多数成年人及牙龈敏感者。'],['禁忌提示','刷毛变形或炸毛应及时更换。']]},{id:'p3',name:'牙线',tags:['推广/广告'],fields:[['推荐理由','能清除牙缝间的菌斑和食物残渣，是刷牙的重要补充。'],['适用人群','牙缝正常或偏紧者；牙缝较大者可用牙缝刷替代。'],['禁忌提示','使用出血持续不退请就医。']]}];
+function renderShop(){
+  var html='';
+  for(var i=0;i<PRODUCTS.length;i++){
+    var p=PRODUCTS[i];
+    html+='<div class="shop-card"><div class="shop-head"><span class="sname">'+p.name+'</span><span class="tag warn">'+p.tags[0]+'</span></div>';
+    for(var j=0;j<p.fields.length;j++){html+='<div class="shop-item"><span class="k">'+p.fields[j][0]+'</span><p>'+p.fields[j][1]+'</p></div>'}
+    html+='<button class="btn star" onclick="openTaobao(\''+p.name+' 口腔护理\')" style="margin-top:12px">去淘宝看看</button></div>';
+  }
+  $('shopList').innerHTML=html;
+}
+function openTaobao(keyword){
+  confirmModal('前往淘宝','将打开淘宝搜索页。是否继续？','去淘宝',function(ok){
+    if(ok)window.open('https://s.taobao.com/search?q='+encodeURIComponent(keyword),'_blank');
+  });
+}
+
+/* ===== 我的页与口腔档案 ===== */
+function saveProfile(){
+  var issue = $('pfIssue').value;
+  storeSet('yyx_profile', { issue: issue });
+  toast('口腔档案已保存');
+  showProfileRecommend(issue);
+}
+
+function showProfileRecommend(issue){
+  var box = $('profileRecommend');
+  if(!issue || issue === '无') {
+    box.innerHTML = '';
+    return;
+  }
+  
+  // 根据口腔档案映射推荐科普 ID
+  var map = {
+    '龋齿': ['caries', 'diet'],
+    '牙周': ['perio', 'scaling'],
+    '敏感': ['sensitive', 'brush'],
+    '正畸': ['braces', 'brush'],
+    '美白': ['whitening', 'scaling'],
+    '口臭': ['badbreath', 'halitosis']
+  };
+  
+  var recIds = map[issue] || [];
+  if(recIds.length === 0) { box.innerHTML = ''; return; }
+  
+  var html = '<div style="font-size:13px; font-weight:700; color:var(--blue); margin-bottom:8px;">💡 针对「' + issue + '」，为你推荐以下科普：</div>';
+  html += '<div class="sci-grid" style="grid-template-columns: 1fr;">'; // 单列显示更清晰
+  
+  recIds.forEach(function(id) {
+    var s = SCI.find(function(x){return x.id === id});
+    if(s) {
+      // 使用卡片样式，增加点击跳转事件
+      html += '<button class="sci-card" onclick="openSciDetail(\''+s.id+'\')" style="margin-bottom:8px;">' +
+        '<div class="st" style="font-size:14px; color:var(--blue);">'+s.t+'</div>' +
+        '<div class="sd" style="color:var(--muted);">'+s.intro+'</div>' +
+        '</button>';
+    }
+  });
+  html += '</div>';
+  box.innerHTML = html;
+}
+
+function renderMine(){
+  var pf = storeGet('yyx_profile', {});
+  $('pfIssue').value = pf.issue || '';
+  showProfileRecommend(pf.issue);
+
+  var unlocked = storeGet('yyx_unlocked', []);
+  var html = '';
+  if(unlocked.length === 0) {
+    html = '<div class="empty" style="grid-column:1/-1">还没有兑换徽章，快去刷牙赚星星吧</div>';
+  } else {
+    unlocked.forEach(function(id){
+      var item = ALL_ITEMS.find(function(x){return x.id === id});
+      if(item && item.type === 'badge'){
+        html += '<div class="badge" style="border-color:var(--star); background:#fffdf5;"><div class="bi" style="font-size:28px;">'+item.icon+'</div><div class="bn">'+item.name+'</div><div class="bd">'+item.desc+'</div></div>';
+      }
+    });
+    if(html === '') html = '<div class="empty" style="grid-column:1/-1">还没有兑换徽章，快去刷牙赚星星吧</div>';
+  }
+  $('badgeGridMine').innerHTML = html;
+}
+
+function askClear(){
+  confirmModal('清除全部数据','将删除本地保存的全部记录、档案与设置，且不可恢复。确定清除吗？','清除',function(ok){
+    if(!ok)return;
+    storeClearAll();
+    document.body.className='';
+    toast('已清除全部数据');
+    navTo('home');
+  });
+}
+
+/* ===== 初始化 ===== */
+function init(){
+  var r=getReminders();$('remMorning').value=r.morning;$('remEvening').value=r.evening;
+  initTheme();
+  renderHome();
+  renderHabits();
+  renderScience();
+  renderShop();
+  renderMine();
+}
+window.addEventListener('resize',function(){if($('timerOverlay').classList.contains('active'))positionStars()});
+init();
+
+window.openTimer=openTimer;window.navTo=navTo;window.saveReminders=saveReminders;window.openExternal=openExternal;window.openTaobao=openTaobao;window.askClear=askClear;window.exitTimer=exitTimer;window.toggleMusic=toggleMusic;window.zoneDone=zoneDone;window.togglePause=togglePause;window.closeDone=closeDone;window.openSciDetail=openSciDetail;
+window.buyItem = buyItem; window.equipItem = equipItem;
+window.startGame = startGame; window.closeGame = closeGame;
+window.saveProfile = saveProfile;
+})();
+</script>
+</body>
+</html>
